@@ -14,6 +14,7 @@ kubectl create ns $NAMESPACE
 kubectl create secret docker-registry buildservice-registry-credentials --docker-server=$ACR_LOGIN_SERVER \
    --docker-username=$ACR_USER --docker-password=$ACR_PASSWORD  -n $NAMESPACE
 kubectl apply -f build-service-demo.yaml -n $NAMESPACE
+# Build image
 ./build-service image save $IMAGE_NAME --tag $ACR_LOGIN_SERVER/$IMAGE_REPO --replace-additional-tag $ACR_LOGIN_SERVER/$IMAGE_REPO$GIT_REVISION --git $GIT_REPO --git-revision $GIT_REVISION --cluster-builder $BUILDER --service-account $SERVICE_ACCOUNT -n $NAMESPACE -w
-
-
+# Rebase image
+kubectl apply -f rebase.yaml
